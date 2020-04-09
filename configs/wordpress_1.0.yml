@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress-poc
+spec:
+  selector:
+    matchLabels:
+      app: poc-wordpress
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: poc-wordpress
+        version: "1.0"
+    spec:
+      containers:
+      - name: poc-wordpress
+        imagePullPolicy: Always
+        image: wordpress:latest
+        ports:
+        - name: http
+          containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 3
